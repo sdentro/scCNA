@@ -1,0 +1,1 @@
+mytransform <- function(x,rho,phi) (phi*2^x-2*(1-rho))/rho

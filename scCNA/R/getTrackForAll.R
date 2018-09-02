@@ -8,8 +8,8 @@ function(bamfile,
                            segmentation_alpha=0.01,
 			   isDuplicate=F, 
 			   isSecondaryAlignment=F,
-			   isNotPassingQualityControls=T,
-			   isUnmappedQuery=T, 
+			   isNotPassingQualityControls=NA,
+			   isUnmappedQuery=NA, 
 			   mapqFilter=0)
 {
     

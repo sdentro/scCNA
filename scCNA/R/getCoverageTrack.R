@@ -1,4 +1,4 @@
-getCoverageTrack <- function (bamPath, chr, starts, ends, CHRSTRING = "", isDuplicate=F, isSecondaryAlignment=F, isNotPassingQualityControls=T, isUnmappedQuery=T, mapqFilter=0)
+getCoverageTrack <- function (bamPath, chr, starts, ends, CHRSTRING = "", isDuplicate=F, isSecondaryAlignment=F, isNotPassingQualityControls=NA, isUnmappedQuery=NA, mapqFilter=0)
 {
     require(Rsamtools)
     require(GenomicRanges)

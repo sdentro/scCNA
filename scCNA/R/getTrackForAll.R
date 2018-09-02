@@ -3,8 +3,6 @@ function(bamfile,
                            window,
                            lSe=NULL,
                            lGCT=NULL,
-                           mappa=NULL,
-                           repli=NULL,
                            allchr=1:22,
                            sdNormalise=0,
                            segmentation_alpha=0.01,
@@ -30,18 +28,8 @@ function(bamfile,
     
     if(is.null(lGCT)) { print("get GC content"); lGCT <- lapply(allchr,function(chr) gcTrack(chr,lSe[[chr]]$starts,lSe[[chr]]$ends)) }
     ## ##################################################
-    if (!is.null(mappa)) {
-      print("correct for mappability")
-      lCTS <- smoothCoverageTrackAll(lCT,lSe,mappa)
-    }
-    
     print("correct for GC content")
     lCTS <- smoothCoverageTrackAll(lCT,lSe,lGCT)
-    
-    if (!is.null(repli)) {
-      print("correct for replication timing")
-      lCTS <- smoothCoverageTrackAll(lCT,lSe,repli)
-    }
     
     gc()
     ## ##################################################

@@ -57,10 +57,14 @@ function(bamfile,
         tum = lCTS[[i]]
         norm = lCTSn[[i]]
         
-        tum$smoothed_nolog = 10^tum$smoothed
-        norm$smoothed_nolog = 10^norm$smoothed
-        tum$smoothed_corrected_nolog = tum$smoothed_nolog / norm$smoothed_nolog
+        smoothed_tum = tum$smoothed
+        smoothed_nolog = 10^smoothed_tum
+        smoothed_nolog = 10^norm$smoothed
+        tum$smoothed_corrected_nolog = smoothed_nolog / smoothed_nolog
         tum$smoothed = log10(tum$smoothed_corrected_nolog)
+        tum$smoothed_tumour = smoothed_tum
+        tum$records_normal = norm$records
+        tum$smoothed_normal = norm$records
         lCTS[[i]] = tum
       }
     }

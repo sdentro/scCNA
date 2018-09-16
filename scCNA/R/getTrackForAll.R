@@ -3,13 +3,14 @@ function(bamfile,
                            window,
                            lSe=NULL,
                            lGCT=NULL,
+                           normalBamfile=NULL,
                            allchr=1:22,
                            sdNormalise=0,
                            segmentation_alpha=0.01,
 			   isDuplicate=F, 
 			   isSecondaryAlignment=F,
-			   isNotPassingQualityControls=NA,
-			   isUnmappedQuery=NA, 
+			   isNotPassingQualityControls=T,
+			   isUnmappedQuery=T, 
 			   mapqFilter=0)
 {
     
@@ -26,10 +27,43 @@ function(bamfile,
 							 isUnmappedQuery=isUnmappedQuery,
 							 mapqFilter=mapqFilter))
     
+    if (!is.null(normalBamfile)) {
+      lCTn <- lapply(allchr, function(chr) getCoverageTrack(bamPath=normalBamfile,
+                                                            chr=paste0(chr),
+                                                            lSe[[chr]]$starts,
+                                                            lSe[[chr]]$ends,
+                                                            isDuplicate=isDuplicate, 
+                                                            isSecondaryAlignment=isSecondaryAlignment,
+                                                            isNotPassingQualityControls=isNotPassingQualityControls,
+                                                            isUnmappedQuery=isUnmappedQuery,
+                                                            mapqFilter=mapqFilter))
+    }
+    
     if(is.null(lGCT)) { print("get GC content"); lGCT <- lapply(allchr,function(chr) gcTrack(chr,lSe[[chr]]$starts,lSe[[chr]]$ends)) }
     ## ##################################################
     print("correct for GC content")
     lCTS <- smoothCoverageTrackAll(lCT,lSe,lGCT)
+    
+    if (!is.null(normalBamfile)) {
+      lCTSn <- smoothCoverageTrackAll(lCTn,lSe,lGCT)
+    }
+    
+    gc()
+    
+    ## ##################################################
+    if (!is.null(normalBamfile)) {
+      print("correct for matched normal")
+      for (i in 1:length(lCTS)) {
+        tum = lCTS[[i]]
+        norm = lCTSn[[i]]
+        
+        tum$smoothed_nolog = 10^tum$smoothed
+        norm$smoothed_nolog = 10^norm$smoothed
+        tum$smoothed_corrected_nolog = tum$smoothed_nolog / norm$smoothed_nolog
+        tum$smoothed = log10(tum$smoothed_corrected_nolog)
+        lCTS[[i]] = tum
+      }
+    }
     
     gc()
     ## ##################################################

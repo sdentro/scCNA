@@ -58,9 +58,9 @@ function(bamfile,
         norm = lCTSn[[i]]
         
         smoothed_tum = tum$smoothed
-        smoothed_nolog = 10^smoothed_tum
-        smoothed_nolog = 10^norm$smoothed
-        tum$smoothed_corrected_nolog = smoothed_nolog / smoothed_nolog
+        tum_smoothed_nolog = 10^smoothed_tum
+        norm_smoothed_nolog = 10^norm$smoothed
+        tum$smoothed_corrected_nolog = tum_smoothed_nolog / norm_smoothed_nolog
         tum$smoothed = log10(tum$smoothed_corrected_nolog)
         tum$smoothed_tumour = smoothed_tum
         tum$records_normal = norm$records
